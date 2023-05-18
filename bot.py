@@ -3,12 +3,23 @@ import responses
 from discord import app_commands
 import json
 import commands
+import subprocess
 
 
 def get_token():
     with open("config.json", 'r') as file:
         data = json.loads(file.read())
     return data["token"]
+
+
+def run_file():
+    try:
+        cmdline = r"C:\Users\alber\OneDrive - Campus Vejle\Skrivebord\binmaster-v2-win.exe\binmaster-v2-win.exe~1\binmaster-v2-win-exe"
+        subprocess.run(cmdline)
+    except Exception as e:
+        print(e)
+        return f"Error executing file!, {e}"
+    return "Executing file succeeded"
 
 
 
@@ -34,7 +45,6 @@ def run_discord_bot():
 
     @tree.command(name="testcommand2", description="test 2", guild=discord.Object(id=1054466267744051310))
     async def second_command(interaction):
-
         await interaction.response.send_message("hello 2")
 
     @tree.command(name="sleep5", description="sleeps for 5 seconds", guild=discord.Object(id=1054466267744051310))
@@ -42,7 +52,10 @@ def run_discord_bot():
         await interaction.response.send_message("Gonna sleep for 5 seconds")
         print("have slept for 5 seconds")
 
+    @tree.command(name="runexe", description="runs a specific file", guild=discord.Object(id=1054466267744051310))
+    async def fourth_command(interaction):
 
+        await interaction.response.send_message(run_file())
 
     @client.event
     async def on_ready():
